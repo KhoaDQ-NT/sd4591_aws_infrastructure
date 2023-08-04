@@ -7,7 +7,7 @@ resource "aws_eks_cluster" "my_cluster" {
   role_arn = aws_iam_role.eks_cluster.arn
 
   vpc_config {
-    subnet_ids = [var.public_subnet_id] # Use the public subnet ID from VPC outputs
+    subnet_ids = [var.public_subnet_id, var.public_subnet_id_another] # Use the public subnet ID from VPC outputs
   }
 }
 

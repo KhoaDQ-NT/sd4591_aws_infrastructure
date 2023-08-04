@@ -12,6 +12,12 @@ resource "aws_subnet" "public_subnet" {
   availability_zone = var.availability_zone
 }
 
+resource "aws_subnet" "public_subnet_another" {
+  vpc_id            = aws_vpc.my_vpc.id
+  cidr_block        = var.public_subnet_cidr_another
+  availability_zone = var.availability_zone_another
+}
+
 resource "aws_internet_gateway" "my_igw" {
   vpc_id = aws_vpc.my_vpc.id
 }

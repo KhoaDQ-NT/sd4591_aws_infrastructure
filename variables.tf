@@ -41,3 +41,11 @@ variable "public_subnet_cidr" {
 variable "availability_zone" {
   description = "Availability zone for the public subnet."
 }
+
+variable "public_subnet_cidr_another" {
+  description = "CIDR block for another public subnet."
+}
+
+variable "availability_zone_another" {
+  description = "Availability zone for another public subnet."
+}

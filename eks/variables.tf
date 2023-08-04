@@ -9,3 +9,7 @@ variable "eks_cluster_name" {
 variable "public_subnet_id" {
   description = "ID of the public subnet."
 }
+
+variable "public_subnet_id_another" {
+  description = "ID of another public subnet."
+}
