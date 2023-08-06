@@ -10,9 +10,10 @@ provider "aws" {
 
 # Use the ecr module
 module "ecr" {
-  source              = "./ecr"
-  region              = var.region
-  ecr_repository_name = var.ecr_repository_name
+  source                 = "./ecr"
+  region                 = var.region
+  ecr_repository_be_name = var.ecr_repository_be_name
+  ecr_repository_fe_name = var.ecr_repository_fe_name
 }
 
 # Use the vpc module

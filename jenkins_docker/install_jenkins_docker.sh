@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo yum install git -y
+
 sudo amazon-linux-extras install docker -y
 sudo systemctl start docker
 sudo systemctl enable docker
@@ -14,4 +16,6 @@ sudo yum install jenkins -y
 sudo systemctl daemon-reload
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
+sudo usermod -aG docker jenkins
+sudo systemctl restart jenkins
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
