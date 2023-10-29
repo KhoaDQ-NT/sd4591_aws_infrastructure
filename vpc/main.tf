@@ -2,36 +2,27 @@ provider "aws" {
   region = var.region
 }
 
-resource "aws_vpc" "my_vpc" {
-  cidr_block = var.vpc_cidr
-}
+data "aws_availability_zones" "available" {}
 
-resource "aws_subnet" "public_subnet" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = var.public_subnet_cidr
-  availability_zone = var.availability_zone
-}
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
 
-resource "aws_subnet" "public_subnet_another" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = var.public_subnet_cidr_another
-  availability_zone = var.availability_zone_another
-}
+  name = var.vpc_name
+  cidr = var.vpc_cidr
 
-resource "aws_internet_gateway" "my_igw" {
-  vpc_id = aws_vpc.my_vpc.id
-}
+  azs = data.aws_availability_zones.available.names
 
-resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.my_vpc.id
+  private_subnets = var.private_subnets
+  public_subnets  = var.public_subnets
+  intra_subnets   = var.intra_subnets
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.my_igw.id
+  enable_nat_gateway = true
+
+  public_subnet_tags = {
+    "kubernetes.io/role/elb" = 1
   }
-}
 
-resource "aws_route_table_association" "public_subnet_association" {
-  subnet_id      = aws_subnet.public_subnet.id
-  route_table_id = aws_route_table.public_route_table.id
+  private_subnet_tags = {
+    "kubernetes.io/role/internal-elb" = 1
+  }
 }

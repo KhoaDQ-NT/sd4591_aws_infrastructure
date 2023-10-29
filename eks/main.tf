@@ -2,32 +2,31 @@ provider "aws" {
   region = var.region
 }
 
-resource "aws_eks_cluster" "my_cluster" {
-  name     = var.eks_cluster_name
-  role_arn = aws_iam_role.eks_cluster.arn
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 19.0"
 
-  vpc_config {
-    subnet_ids = [var.public_subnet_id, var.public_subnet_id_another] # Use the public subnet ID from VPC outputs
+  cluster_name                   = var.eks_cluster_name
+  cluster_endpoint_public_access = true
+
+  vpc_id                   = var.vpc_id
+  subnet_ids               = var.private_subnet_ids
+  control_plane_subnet_ids = var.intra_subnet_ids
+
+  # EKS Managed Node Group(s)
+  eks_managed_node_group_defaults = {
+    ami_type       = "AL2_x86_64"
+    instance_types = ["t3.large"]
   }
-}
 
-resource "aws_iam_role" "eks_cluster" {
-  name = "EksClusterRole"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "eks.amazonaws.com"
-        }
-      }
-    ]
-  })
-}
+  eks_managed_node_groups = {
+    cluster-wg = {
+      min_size     = 1
+      max_size     = 2
+      desired_size = 1
 
-resource "aws_iam_role_policy_attachment" "eks_cluster_attachment" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks_cluster.name
+      instance_types = ["t3.large"]
+      capacity_type  = "SPOT"
+    }
+  }
 }

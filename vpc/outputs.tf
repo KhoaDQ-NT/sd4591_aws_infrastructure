@@ -1,11 +1,19 @@
 output "vpc_id" {
-  value = aws_vpc.my_vpc.id
+  value = module.vpc.vpc_id
 }
 
-output "public_subnet_id" {
-  value = aws_subnet.public_subnet.id
+output "public_subnet_ids" {
+  description = "Public subnet ID for EC2 instances"
+  value       = module.vpc.public_subnets # Assuming you want to output the first public subnet's IP
 }
 
-output "public_subnet_id_another" {
-  value = aws_subnet.public_subnet_another.id
+output "private_subnet_ids" {
+  description = "Private subnet ID for EC2 instances"
+  value       = module.vpc.private_subnets
 }
+
+output "intra_subnet_ids" {
+  description = "Intra subnet ID for EC2 instances"
+  value       = module.vpc.intra_subnets
+}
+

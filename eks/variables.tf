@@ -6,10 +6,14 @@ variable "eks_cluster_name" {
   description = "Name for the EKS cluster."
 }
 
-variable "public_subnet_id" {
-  description = "ID of the public subnet."
+variable "private_subnet_ids" {
+  description = "Private subnets."
 }
 
-variable "public_subnet_id_another" {
-  description = "ID of another public subnet."
+variable "intra_subnet_ids" {
+  description = "Intra subnets."
+}
+
+variable "vpc_id" {
+  description = "ID of the VPC."
 }

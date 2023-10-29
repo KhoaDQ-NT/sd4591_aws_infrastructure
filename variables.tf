@@ -22,6 +22,10 @@ variable "instance_type" {
   description = "Instance type for the Jenkins and Docker EC2 instance."
 }
 
+variable "instance_count" {
+  description = "Instance count for the Jenkins and Docker EC2 instance."
+}
+
 variable "key_name" {
   description = "Name of the EC2 key pair used for Jenkins and Docker EC2 instance."
 }
@@ -34,22 +38,26 @@ variable "docker_sg_cidr" {
   description = "CIDR block to restrict Docker access."
 }
 
+variable "vpc_name" {
+  description = "Name for the VPC."
+}
+
 variable "vpc_cidr" {
   description = "CIDR block for the VPC."
 }
 
-variable "public_subnet_cidr" {
-  description = "CIDR block for the public subnet."
+# variable "azs" {
+#   description = "Availability zones for another public subnet."
+# }
+
+variable "public_subnets" {
+  description = "CIDR blocks for the public subnet."
 }
 
-variable "availability_zone" {
-  description = "Availability zone for the public subnet."
+variable "private_subnets" {
+  description = "Private subnets."
 }
 
-variable "public_subnet_cidr_another" {
-  description = "CIDR block for another public subnet."
-}
-
-variable "availability_zone_another" {
-  description = "Availability zone for another public subnet."
+variable "intra_subnets" {
+  description = "Intra subnets."
 }

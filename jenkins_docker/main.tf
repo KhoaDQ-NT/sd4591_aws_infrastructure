@@ -36,7 +36,8 @@ resource "aws_security_group" "jenkins_docker_sg" {
 resource "aws_instance" "jenkins_docker_instance" {
   ami           = var.ami
   instance_type = var.instance_type
-  subnet_id     = var.public_subnet_id
+  count         = var.instance_count
+  subnet_id     = element(var.public_subnet_ids, count.index % length(var.public_subnet_ids))
   vpc_security_group_ids = [
     aws_security_group.jenkins_docker_sg.id,
   ]
@@ -46,7 +47,7 @@ resource "aws_instance" "jenkins_docker_instance" {
   # user_data = file("install_jenkins_docker.sh")
 
   tags = {
-    Name = "JenkinsDockerInstance"
+    Name = "JenkinsDockerInstance-${count.index}"
   }
 
   associate_public_ip_address = true
@@ -54,13 +55,15 @@ resource "aws_instance" "jenkins_docker_instance" {
 
 # an empty resource block
 resource "null_resource" "name" {
+  count = var.instance_count
 
   # ssh into the ec2 instance 
   connection {
     type        = "ssh"
     user        = "ec2-user"
     private_key = file("~/Documents/AWS_Credentials/myec2kp.pem")
-    host        = aws_instance.jenkins_docker_instance.public_ip
+    host        = element(aws_instance.jenkins_docker_instance.*.public_ip, count.index)
+    //aws_instance.jenkins_docker_instance[count.index].public_ip
   }
 
   # copy the install_jenkins_docker.sh file from your computer to the ec2 instance 
@@ -84,5 +87,5 @@ resource "null_resource" "name" {
 
 # print the url of the jenkins server
 output "website_url" {
-  value = join("", ["http://", aws_instance.jenkins_docker_instance.public_dns, ":", "8080"])
+  value = join("", ["http://", element(aws_instance.jenkins_docker_instance.*.public_dns, 0), ":", "8080"])
 }

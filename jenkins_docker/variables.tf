@@ -10,6 +10,10 @@ variable "instance_type" {
   description = "Instance type for the Jenkins and Docker EC2 instance."
 }
 
+variable "instance_count" {
+  description = "Instance count for the Jenkins and Docker EC2 instance."
+}
+
 variable "key_name" {
   description = "Name of the EC2 key pair used for Jenkins and Docker EC2 instance."
 }
@@ -26,10 +30,6 @@ variable "vpc_id" {
   description = "ID of the VPC."
 }
 
-variable "public_subnet_id" {
-  description = "ID of the public subnet."
-}
-
-variable "public_subnet_id_another" {
-  description = "ID of another public subnet."
+variable "public_subnet_ids" {
+  description = "Public subnet IP address for EC2 instances"
 }
